@@ -4,6 +4,9 @@ import br.com.telzir.falemais.enums.PlanoFaleMais
 import br.com.telzir.falemais.presenters.SimulacaoPresenter
 import br.com.telzir.falemais.presenters.TarifaPresenter
 import br.com.telzir.falemais.services.TarifaService
+import io.swagger.annotations.ApiModel
+import io.swagger.annotations.ApiModelProperty
+import io.swagger.annotations.ApiParam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.http.ResponseEntity.noContent
@@ -34,7 +37,7 @@ class TarifaController {
     @GetMapping("/simulacao/{origem}/{destino}/{minutos}/{plano}")
     fun getSimulacao(@PathVariable origem:String,
                      @PathVariable destino:String,
-                     @PathVariable @Min(1) @Max(1440) minutos:Int,
+                     @PathVariable @Min(1) @Max(1440) @ApiParam(allowableValues = "min:1, max:1440") minutos:Int,
                      @PathVariable plano:PlanoFaleMais
     ):ResponseEntity<SimulacaoPresenter> {
         return ok(this.tarifaService.getSimulacao(origem, destino, minutos, plano))
