@@ -1,5 +1,5 @@
-# poc-talkmore
-POC do Talk More
+# POC do Talk More
+Instruções de uso
 
 ## Inicialização do projeto
 
@@ -13,7 +13,9 @@ Na pasta do projeto, executar `mvn package` e, depois, `java -jar target/poc-fal
 ### Site 
   O site que acessa a API de simulação fica disponível em: http://localhost:8080/
   
-  Basta ir no item "Quanta Economia!" (canto superior direito) e depois em "Simular!" (para onde a página va te levar e à esquerda)
+  Basta ir no item "Quanta Economia!" (canto superior direito) e depois em "Simular!" (para onde a página va te levar e à esquerda).
+  
+  Foi feito assim para facilitar a vida do avaliador, bastando inicializar uma aplicação.
 
 ### API
   Basta acessar o Swagger da API em http://localhost:8080/swagger-ui.html
