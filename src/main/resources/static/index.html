@@ -42,7 +42,7 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link js-scroll-trigger" href="#simulacao">Quanto economia!</a>
+            <a class="nav-link js-scroll-trigger" href="#simulacao" onclick="iniciar.focus()">Quanto economia?</a>
           </li>          
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#features">Deu bom!</a>
@@ -148,7 +148,7 @@
     </div>
   </section>
 
-  <section class="cta" id="simulacao">
+  <section class="cta" id="simulacao2">
     <div class="cta-content">
       <div id="simulador" style="display: none;">     
         <span>
@@ -172,14 +172,14 @@
             <option value="0">-?-</option>
           </select>        
         </span>      
-        <button id="btn_simular" style="display: none;" class="btn btn-outline btn-xl"
-        onclick="simular()">Simular!</button>
+        <button id="btn_simular" style="visibility: hidden" class="btn btn-outline btn-xl"
+        onclick="simular()"><b>Simular!</b></button>
         <span id="resultado" style="display: none;">
           <br>
           <table class="table">
             <thead>
               <tr>
-                <th scope="col" colspan="4">
+                <th scope="col" colspan="3">
                   Quanto custaria <b class="text-success" id="simulacao_minutos">555</b> minutos de ligação do
                   DDD <b class="text-success" id="simulacao_origem">10</b> para o
                   DDD <b class="text-success" id="simulacao_destino">20</b>
@@ -188,8 +188,7 @@
                       <tr>
                 <th scope="col"> Plano</th>
                 <th scope="col"> <i class="far fa-thumbs-down"></i> Sem FaleMais</th>
-                <th scope="col"> <i class="fa fa-check-circle" aria-hidden="true"></i> Com FaleMais</th>
-                <th scope="col"> <i class="fas fa-hand-holding-usd"></i> Você economiza</th>
+                <th scope="col"> <i class="fas fa-hand-holding-usd" aria-hidden="true"></i> Com FaleMais</th>
               </tr>
             </thead>
             <tbody id="simulado">
@@ -204,9 +203,10 @@
           </table>
         </span>
       </div>
-      <div class="container">
+      <div class="container" id="simulacao">
         <h2 id="motivacao">Descubra o quanto vai<br>economizar</h2>
-        <a id="iniciar" href="javascript:;" onclick="abrirSimulacao()" class="btn btn-outline btn-xl">Simular!</a>
+        <a id="iniciar" href="javascript:;" onclick="abrirSimulacao()" class="btn btn-outline btn-xl">
+          <b>Simular!</b></a>
       </div>
     </div>
     <div class="overlay"></div>

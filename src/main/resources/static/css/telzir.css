@@ -1,11 +1,10 @@
 #simulador {
     float: right;
-    margin-right: 20em;
-    margin-top:-5em;
-    background-color: rgba(255, 255, 255, 0.70);
-    padding-top: 0.5em;
-    padding-right: 0.5em;
-    padding-left: 0.5em;
+    margin-right: 5%;
+    background-color: rgba(255, 255, 255, 0.73);
+    padding-top: 1.7em;
+    padding-right: 1em;
+    padding-left: 1em;
 }
 
 #simulador label {

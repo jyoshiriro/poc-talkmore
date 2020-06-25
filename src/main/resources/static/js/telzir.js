@@ -3,7 +3,6 @@ const optionPlano = '<option value="0">Simular com todos</option>';
 
 function abrirSimulacao() {
     iniciar.style.display = 'none';
-    motivacao.style.display = 'none';
     obterDadosIniciais();
 }
 
@@ -77,7 +76,7 @@ function filtrarDestinos(dddOrigem) {
 
                 ddd_destino.innerHTML = variosDestinos ? optionInterrogacao : '';
 
-                btn_simular.style.display = variosDestinos ? 'none' : ''
+                btn_simular.style.visibility = variosDestinos ? 'hidden' : 'visible';
 
                 json.forEach((item, i) => {
                     ddd_destino.innerHTML += `<option value="${item}">${item}</option>`
@@ -96,11 +95,11 @@ function filtrarDestinos(dddOrigem) {
 
 function ocultarDestinoSimulacao() {
     destinos.style.display = 'none';
-    btn_simular.style.display = 'none';
+    btn_simular.style.visibility = 'hidden';
 }
 
 function verificarBotaoSimulacao() {
-    btn_simular.style.display = ddd_destino.value == '0' ? 'none' : '';
+    btn_simular.style.visibility = ddd_destino.value == '0' ? 'hidden' : 'visible';
 }
 
 function simular() {
@@ -112,6 +111,10 @@ function simular() {
     fetch(uri, { cache: 'no-store' }).then(function (resHttp) {
         if (resHttp.ok) {
             resHttp.json().then(function (json) {
+
+                simulacao_minutos.innerHTML = minutos.value;
+                simulacao_origem.innerHTML = ddd_origem.value;
+                simulacao_destino.innerHTML = ddd_destino.value;
 
                 console.log(`Dados da simulação: ${JSON.stringify(json)}`);
 
@@ -142,8 +145,7 @@ function linhaSimulacao(jsonSimulacao) {
     <tr>
         <td><b>${jsonSimulacao.plano}</b></td>
         <td><span class="text-dark">${formatoMoeda(jsonSimulacao.semFaleMais)}</span></td>
-        <td><span class="text-body">${formatoMoeda(jsonSimulacao.comFaleMais)}</span></td>
-        <td><b>${formatoMoeda(jsonSimulacao.semFaleMais-jsonSimulacao.comFaleMais)}</b></td>
+        <td><b class="text-primary">${formatoMoeda(jsonSimulacao.comFaleMais)}</b></td>
     </tr>
     `;
     return linha;
