@@ -1,8 +1,8 @@
 #simulador {
-    display: nonex;
     float: right;
     margin-right: 20em;
-    background-color: rgba(255, 255, 255, 0.41);
+    margin-top:-5em;
+    background-color: rgba(255, 255, 255, 0.70);
     padding-top: 0.5em;
     padding-right: 0.5em;
     padding-left: 0.5em;

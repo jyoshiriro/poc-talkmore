@@ -1,7 +1,6 @@
 package br.com.telzir.falemais.services
 
 import br.com.telzir.falemais.enums.Tarifa
-import br.com.telzir.falemais.presenters.TarifaPresenter
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -41,7 +40,7 @@ class TarifaServiceTest extends Specification {
         simulacao.semFaleMais?.doubleValue() == sem
         simulacao.origem == origem
         simulacao.destino == destino
-        simulacao.plano == plano.getNome()
+        simulacao.plano == plano.getDescricao()
 
         where: 'Valores com e sem plano FaleMais em diferentes combinações'
         origem | destino | minutos | plano         | com   | sem
@@ -119,5 +118,22 @@ class TarifaServiceTest extends Specification {
         '17'   | '17'    | 80      | FALE_MAIS_60  | 0     | 0
         '17'   | '17'    | 90      | FALE_MAIS_120 | 0     | 0
         '17'   | '17'    | 150     | FALE_MAIS_120 | 0     | 0
+    }
+
+    @Unroll
+    def "Simulação c/ origem: #origem, destino: #destino, minutos: #minutos > Plano: #plano - Com Fale Mais: \$#com, Sem Fale Mais: \$#sem"() {
+        setup:
+        def simulacao = service.getSimulacao(origem, destino, minutos, plano)
+
+        expect: 'Os valores de tarifa com e sem o plano FaleMais devem estar corretos e demais valores inalterados'
+        simulacao.comFaleMais?.doubleValue() == com
+        simulacao.semFaleMais?.doubleValue() == sem
+        simulacao.origem == origem
+        simulacao.destino == destino
+        simulacao.plano == plano.getDescricao()
+
+        where: 'Valores com e sem plano FaleMais em diferentes combinações'
+        origem | destino | minutos | plano        | com | sem
+        '11'   | '16'    | 20      | FALE_MAIS_30 | 0   | 38  // do exemplo do PDF
     }
 }

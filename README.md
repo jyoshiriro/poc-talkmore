@@ -11,11 +11,11 @@ Na pasta do projeto, executar `mvn package` e, depois, `java -jar target/poc-fal
 
 ## Navegado no projeto
 ### Site 
-  O site que acessa a API de simulação fica disponível em: http://localhost:8080/
+  O site que acessa a API de simulação fica disponível em: http://localhost:8321/
   
   Basta ir no item "Quanta Economia!" (canto superior direito) e depois em "Simular!" (para onde a página va te levar e à esquerda).
   
-  Foi feito assim para facilitar a vida do avaliador, bastando inicializar uma aplicação.
+  Foi feito assim para facilitar a vida do avaliador, bastando inicializar uma aplicação. A escolha da porta **8321** foi porque, provavelmente, a porta **8080** do avaliador vai estar ocupada.
 
 ### API
-  Basta acessar o Swagger da API em http://localhost:8080/swagger-ui.html
+  Basta acessar o Swagger da API em http://localhost:8321/swagger-ui.html

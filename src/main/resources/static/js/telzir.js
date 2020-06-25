@@ -1,9 +1,39 @@
 const optionInterrogacao = '<option value="0">-?-</option>';
+const optionPlano = '<option value="0">Simular com todos</option>';
 
 function abrirSimulacao() {
     iniciar.style.display = 'none';
     motivacao.style.display = 'none';
+    obterDadosIniciais();
+}
+
+function obterDadosIniciais() {
+    obterPlanos();
     obterDddsOrigem();
+}
+
+function obterPlanos() {
+
+    fetch('/tarifas/planos').then(function (resHttp) {
+        if (resHttp.ok) {
+            resHttp.json().then(function (json) {
+
+                console.log(`Planos: ${JSON.stringify(json)}`);
+
+                plano.innerHTML = optionPlano;
+                json.forEach((item, i) => {
+                    plano.innerHTML += `<option value="${item.codigo}">${item.descricao}</option>`
+                });
+
+                minutos.focus();
+            });
+        } else {
+            console.error('Nenhum dado encontrado ou erro na API');
+        }
+    })
+    .catch(function (error) {
+        console.error(`Erro na obtenção dos DDD de origem ${error.message}`);
+    });
 }
 
 function obterDddsOrigem() {
@@ -19,7 +49,7 @@ function obterDddsOrigem() {
                 ddd_origem.innerHTML = optionInterrogacao;
                 json.forEach((item, i) => {
                     ddd_origem.innerHTML += `<option value="${item}">${item}</option>`
-                })
+                });
 
                 simulador.style.display = '';
                 minutos.focus();
@@ -79,8 +109,6 @@ function simular() {
         uri+=`/${plano.value}`
     }
 
-    console.log(uri);
-
     fetch(uri, { cache: 'no-store' }).then(function (resHttp) {
         if (resHttp.ok) {
             resHttp.json().then(function (json) {
@@ -89,15 +117,15 @@ function simular() {
 
                 simulado.innerHTML = '';
 
-                json.forEach((item, i) => {
-                    let linha = `<tr>`;
-                    linha += `<td>${item.plano}</td>`;
-                    linha += `<td>R$${item.semFaleMais}</td>`;
-                    linha += `<td>R$${item.comFaleMais}</td>`;
-                    linha += `<td>R$${item.semFaleMais-item.comFaleMais}</td>`;
-                    linha += `</tr>`;
-                    simulado.innerHTML += linha;
-                })
+                if (Array.isArray(json)) {
+                    json.forEach((item, i) => {
+                        simulado.innerHTML += linhaSimulacao(item);
+                    });
+                } else {
+                    simulado.innerHTML += linhaSimulacao(json);
+                }
+
+                resultado.style.display = '';
                 
             });
         } else {
@@ -107,4 +135,20 @@ function simular() {
     .catch(function (error) {
         console.error(`Erro na obtenção dos dados da simulação ${error.message}`);
     });    
+}
+
+function linhaSimulacao(jsonSimulacao) {
+    let linha = `
+    <tr>
+        <td><b>${jsonSimulacao.plano}</b></td>
+        <td><span class="text-dark">${formatoMoeda(jsonSimulacao.semFaleMais)}</span></td>
+        <td><span class="text-body">${formatoMoeda(jsonSimulacao.comFaleMais)}</span></td>
+        <td><b>${formatoMoeda(jsonSimulacao.semFaleMais-jsonSimulacao.comFaleMais)}</b></td>
+    </tr>
+    `;
+    return linha;
+}
+
+function formatoMoeda(numero) {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(numero);
 }

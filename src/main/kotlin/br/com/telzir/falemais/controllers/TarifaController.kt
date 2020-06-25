@@ -1,11 +1,10 @@
 package br.com.telzir.falemais.controllers
 
 import br.com.telzir.falemais.enums.PlanoFaleMais
+import br.com.telzir.falemais.presenters.PlanoPresenter
 import br.com.telzir.falemais.presenters.SimulacaoPresenter
 import br.com.telzir.falemais.presenters.TarifaPresenter
 import br.com.telzir.falemais.services.TarifaService
-import io.swagger.annotations.ApiModel
-import io.swagger.annotations.ApiModelProperty
 import io.swagger.annotations.ApiParam
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -27,23 +26,33 @@ class TarifaController {
     @Autowired
     private lateinit var tarifaService: TarifaService
 
+    private fun <T> okOuNoContent(lista: List<T>): ResponseEntity<List<T>> { // criada apenas p/ brincar com Generics da kotlin
+        return if (lista.isEmpty()) noContent().build() else ok(lista)
+    }
+
     @GetMapping
     fun getTarifas():ResponseEntity<List<TarifaPresenter>> {
         // se fosse fazer direto com kotlin: val tarifas = Tarifa.values().map { TarifaPresenter(it) }
         val tarifas = this.tarifaService.tarifas
-        return if (tarifas.isEmpty()) noContent().build() else ok(tarifas)
+        return okOuNoContent(tarifas)
+    }
+
+    @GetMapping("/planos")
+    fun getPlanos():ResponseEntity<List<PlanoPresenter>> {
+        val planos = this.tarifaService.planos
+        return okOuNoContent(planos)
     }
 
     @GetMapping("/ddd/origens")
     fun getDddsOrigem():ResponseEntity<List<String>> {
         val tarifas = this.tarifaService.dddsOrigem
-        return if (tarifas.isEmpty()) noContent().build() else ok(tarifas)
+        return okOuNoContent(tarifas)
     }
 
     @GetMapping("/ddd/destinos/{dddOrigem}")
     fun getDddsDestino(@PathVariable dddOrigem: String):ResponseEntity<List<String>> {
         val tarifas = this.tarifaService.getDddsDestino(dddOrigem)
-        return if (tarifas.isEmpty()) noContent().build() else ok(tarifas)
+        return okOuNoContent(tarifas)
     }
 
     @GetMapping("/simulacao/{origem}/{destino}/{minutos}/{plano}")
@@ -61,6 +70,6 @@ class TarifaController {
                      @PathVariable @Min(1) @Max(1440) @ApiParam(allowableValues = "min:1, max:1440") minutos:Int
     ):ResponseEntity<List<SimulacaoPresenter>> {
         val simulacoes = this.tarifaService.getSimulacaoTodosPlanos(origem, destino, minutos)
-        return if (simulacoes.isEmpty()) noContent().build() else ok(simulacoes)
+        return okOuNoContent(simulacoes)
     }
 }

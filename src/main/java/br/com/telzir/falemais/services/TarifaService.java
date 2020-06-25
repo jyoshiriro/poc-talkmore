@@ -2,6 +2,7 @@ package br.com.telzir.falemais.services;
 
 import br.com.telzir.falemais.enums.PlanoFaleMais;
 import br.com.telzir.falemais.enums.Tarifa;
+import br.com.telzir.falemais.presenters.PlanoPresenter;
 import br.com.telzir.falemais.presenters.SimulacaoPresenter;
 import br.com.telzir.falemais.presenters.TarifaPresenter;
 import org.jetbrains.annotations.NotNull;
@@ -18,9 +19,16 @@ public class TarifaService {
 
     public List<TarifaPresenter> getTarifas() {
         List<TarifaPresenter> tarifas = new ArrayList<>();
-        for (Tarifa tarifa : Tarifa.values()) {
+        for (Tarifa tarifa : Tarifa.values()) { // old school, é bom saber devido a legado ;)
             tarifas.add(new TarifaPresenter(tarifa));
         }
+        return tarifas;
+    }
+
+    public List<PlanoPresenter> getPlanos() {
+        List<PlanoPresenter> tarifas = Arrays.stream(PlanoFaleMais.values())
+                .map(plano -> new PlanoPresenter(plano))
+                .collect(Collectors.toList());
         return tarifas;
     }
 
@@ -60,11 +68,11 @@ public class TarifaService {
 
             BigDecimal valorSemFaleMais = BigDecimal.valueOf(minutos).multiply(BigDecimal.valueOf(tarifa.getTarifaMinuto()));
 
-            return new SimulacaoPresenter(origem, destino, minutos, plano.getNome(), valorComFaleMais, valorSemFaleMais);
+            return new SimulacaoPresenter(origem, destino, minutos, plano.getDescricao(), valorComFaleMais, valorSemFaleMais);
 
         } catch (IllegalArgumentException e) {
             BigDecimal valorTarifa = origem.equals(destino) ? BigDecimal.ZERO : null;
-            return new SimulacaoPresenter(origem, destino, minutos, plano.getNome(), valorTarifa, valorTarifa);
+            return new SimulacaoPresenter(origem, destino, minutos, plano.getDescricao(), valorTarifa, valorTarifa);
         }
     }
 

@@ -7,15 +7,15 @@ public enum PlanoFaleMais {
     FALE_MAIS_120(120, "Fale Mais 120");
 
     int minutosFranquia;
-    String nome;
+    String descricao;
 
-    PlanoFaleMais(int minutosFranquia, String nome) {
+    PlanoFaleMais(int minutosFranquia, String descricao) {
         this.minutosFranquia = minutosFranquia;
-        this.nome = nome;
+        this.descricao = descricao;
     }
 
-    public String getNome() {
-        return nome;
+    public String getDescricao() {
+        return descricao;
     }
 
     public int getMinutosFranquia() {

@@ -46,7 +46,7 @@ class TarifaControllerTest extends Specification {
     def "GET /simulacao/#origem/#destino/#minutos/#plano deve retornar \$#com com Fale Mais e \$#sem sem"() {
         setup:
         def simulacao = new SimulacaoPresenter(
-                                    origem, destino, minutos, plano.getNome(), com?.toBigDecimal(), sem?.toBigDecimal())
+                                    origem, destino, minutos, plano.getDescricao(), com?.toBigDecimal(), sem?.toBigDecimal())
         service.getSimulacao(origem, destino, minutos, plano) >> simulacao
 
         and:
