@@ -154,12 +154,14 @@
         <span>
           <label for="minutos">Quantos minutos?</label>
           <input id="minutos" type="number" step="1" min="1" max="1440"/>        
-        </span>          
+        </span>
+        <label for="plano">Qual seria o plano?</label>
         <select id="plano">
           <option value="0">Simular com todos</option>
           <option value="1">FaleMais 30</option>
           <option value="2">FaleMais 60</option>
-        </select>           
+        </select>
+        <br>
         <label for="ddd_origem">DDD de origem:</label>
         <select id="ddd_origem" onchange="filtrarDestinos(this.value)">
           <option value="0">-?-</option>
@@ -177,10 +179,17 @@
           <table class="table">
             <thead>
               <tr>
+                <th scope="col" colspan="4">
+                  Quanto custaria <b class="text-success" id="simulacao_minutos">555</b> minutos de ligação do
+                  DDD <b class="text-success" id="simulacao_origem">10</b> para o
+                  DDD <b class="text-success" id="simulacao_destino">20</b>
+                </th>
+              </tr>
+                      <tr>
                 <th scope="col"> Plano</th>
                 <th scope="col"> <i class="far fa-thumbs-down"></i> Sem FaleMais</th>
                 <th scope="col"> <i class="fa fa-check-circle" aria-hidden="true"></i> Com FaleMais</th>
-                <th scope="col"> <i class="fas fa-hand-holding-usd"></i> Economia</th>
+                <th scope="col"> <i class="fas fa-hand-holding-usd"></i> Você economiza</th>
               </tr>
             </thead>
             <tbody id="simulado">
