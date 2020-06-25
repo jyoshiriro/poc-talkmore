@@ -145,7 +145,7 @@ function linhaSimulacao(jsonSimulacao) {
     <tr>
         <td><b>${jsonSimulacao.plano}</b></td>
         <td><span class="text-dark">${formatoMoeda(jsonSimulacao.semFaleMais)}</span></td>
-        <td><b class="text-primary">${formatoMoeda(jsonSimulacao.comFaleMais)}</b></td>
+        <td><b class="text-falemais">${formatoMoeda(jsonSimulacao.comFaleMais)}</b></td>
     </tr>
     `;
     return linha;

@@ -19,8 +19,29 @@
     width: 3.5em;
 }
 
-#simulador button {
+#simulador #btn_simular {
     margin-left: 0.7em;
     margin-bottom: 0.7em;
 }
 
+#simulador #btn_simular.btn-outline  {
+  background-color: rgba(221, 75, 57, 0.9);
+}
+
+#simulador #btn_simular.btn-outline:hover {
+  background-color: #fdcc52;
+}
+
+.text-falemais {
+  color:#3a5794;
+}
+
+.btn-outline.like {
+  border-color: #3a5794;
+  background-color: #3a5794;
+}
+
+.btn-outline.like:hover {
+  border-color: #1da1f2;
+  background-color: #1da1f2;
+}
