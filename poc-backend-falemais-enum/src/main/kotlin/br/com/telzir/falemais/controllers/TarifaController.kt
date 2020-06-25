@@ -34,6 +34,18 @@ class TarifaController {
         return if (tarifas.isEmpty()) noContent().build() else ok(tarifas)
     }
 
+    @GetMapping("/ddd/origens")
+    fun getDddsOrigem():ResponseEntity<List<String>> {
+        val tarifas = this.tarifaService.dddsOrigem
+        return if (tarifas.isEmpty()) noContent().build() else ok(tarifas)
+    }
+
+    @GetMapping("/ddd/destinos/{dddOrigem}")
+    fun getDddsDestino(@PathVariable dddOrigem: String):ResponseEntity<List<String>> {
+        val tarifas = this.tarifaService.getDddsDestino(dddOrigem)
+        return if (tarifas.isEmpty()) noContent().build() else ok(tarifas)
+    }
+
     @GetMapping("/simulacao/{origem}/{destino}/{minutos}/{plano}")
     fun getSimulacao(@PathVariable origem:String,
                      @PathVariable destino:String,
@@ -41,5 +53,14 @@ class TarifaController {
                      @PathVariable plano:PlanoFaleMais
     ):ResponseEntity<SimulacaoPresenter> {
         return ok(this.tarifaService.getSimulacao(origem, destino, minutos, plano))
+    }
+
+    @GetMapping("/simulacao/{origem}/{destino}/{minutos}")
+    fun getSimulacaoTodosPlanos(@PathVariable origem:String,
+                     @PathVariable destino:String,
+                     @PathVariable @Min(1) @Max(1440) @ApiParam(allowableValues = "min:1, max:1440") minutos:Int
+    ):ResponseEntity<List<SimulacaoPresenter>> {
+        val simulacoes = this.tarifaService.getSimulacaoTodosPlanos(origem, destino, minutos)
+        return if (simulacoes.isEmpty()) noContent().build() else ok(simulacoes)
     }
 }

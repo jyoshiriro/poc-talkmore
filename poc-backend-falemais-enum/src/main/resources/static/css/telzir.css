@@ -1,0 +1,27 @@
+#simulador {
+    display: nonex;
+    float: right;
+    margin-right: 20em;
+    background-color: rgba(255, 255, 255, 0.41);
+    padding-top: 0.5em;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+}
+
+#simulador label {
+    margin-right: 0.3em;
+}
+
+#simulador span {
+    margin-left: 0.7em;
+}
+
+#simulador #minutos {
+    width: 3.5em;
+}
+
+#simulador button {
+    margin-left: 0.7em;
+    margin-bottom: 0.7em;
+}
+

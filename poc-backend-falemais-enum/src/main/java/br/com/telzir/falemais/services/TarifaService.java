@@ -4,11 +4,14 @@ import br.com.telzir.falemais.enums.PlanoFaleMais;
 import br.com.telzir.falemais.enums.Tarifa;
 import br.com.telzir.falemais.presenters.SimulacaoPresenter;
 import br.com.telzir.falemais.presenters.TarifaPresenter;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TarifaService {
@@ -19,6 +22,19 @@ public class TarifaService {
             tarifas.add(new TarifaPresenter(tarifa));
         }
         return tarifas;
+    }
+
+    public List<String> getDddsOrigem() {
+        return Arrays.stream(Tarifa.values())
+                .map(Tarifa::getOrigem).distinct()
+                .collect(Collectors.toList());
+    }
+
+    public List<String> getDddsDestino(String dddOrigem) {
+        return Arrays.stream(Tarifa.values())
+                .filter(tarifa -> (tarifa.getOrigem().equals(dddOrigem)))
+                .map(Tarifa::getDestino).distinct()
+                .collect(Collectors.toList());
     }
 
     /**
@@ -50,5 +66,12 @@ public class TarifaService {
             BigDecimal valorTarifa = origem.equals(destino) ? BigDecimal.ZERO : null;
             return new SimulacaoPresenter(origem, destino, minutos, plano.getNome(), valorTarifa, valorTarifa);
         }
+    }
+
+    @NotNull
+    public List<SimulacaoPresenter> getSimulacaoTodosPlanos(String origem, String destino, int minutos) {
+        return Arrays.stream(PlanoFaleMais.values())
+                .map(plano -> getSimulacao(origem, destino, minutos, plano))
+                .collect(Collectors.toList());
     }
 }
