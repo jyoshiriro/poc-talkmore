@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.validation.constraints.Max
 import javax.validation.constraints.Min
 
 @RestController
@@ -33,7 +34,7 @@ class TarifaController {
     @GetMapping("/simulacao/{origem}/{destino}/{minutos}/{plano}")
     fun getSimulacao(@PathVariable origem:String,
                      @PathVariable destino:String,
-                     @PathVariable @Min(1) minutos:Int,
+                     @PathVariable @Min(1) @Max(1440) minutos:Int,
                      @PathVariable plano:PlanoFaleMais
     ):ResponseEntity<SimulacaoPresenter> {
         return ok(this.tarifaService.getSimulacao(origem, destino, minutos, plano))

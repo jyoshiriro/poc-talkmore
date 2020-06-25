@@ -1,6 +1,7 @@
 package br.com.telzir.falemais.services
 
-
+import br.com.telzir.falemais.enums.Tarifa
+import br.com.telzir.falemais.presenters.TarifaPresenter
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -8,10 +9,32 @@ import static br.com.telzir.falemais.enums.PlanoFaleMais.*
 
 class TarifaServiceTest extends Specification {
 
+    TarifaService service
+
+    def setup() {
+        service = new TarifaService()
+    }
+
+    def 'Lista de tarifas da service devem estar com os valores recuperados da Enum de Tarifa'() {
+        given:
+        def tarifasBase = Tarifa.values()
+
+        when:
+        def presenters = service.getTarifas()
+
+        then:
+        presenters.size() == tarifasBase.size()
+        tarifasBase.eachWithIndex { tarifa, i ->
+            tarifa.origem == presenters[i].origem
+            tarifa.destino == presenters[i].destino
+            tarifa.tarifaMinuto == presenters[i].tarifa
+        }
+    }
+
     @Unroll
     def "Simulação c/ origem: #origem, destino: #destino, minutos: #minutos, plano: #plano - Com Fale Mais: \$#com, Sem Fale Mais: \$#sem"() {
         setup:
-        def simulacao = new TarifaService().getSimulacao(origem, destino, minutos, plano)
+        def simulacao = service.getSimulacao(origem, destino, minutos, plano)
 
         expect: 'Os valores de tarifa com e sem o plano FaleMais devem estar corretos e demais valores inalterados'
         simulacao.comFaleMais?.doubleValue() == com
