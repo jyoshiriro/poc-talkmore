@@ -26,8 +26,8 @@ class TarifaController {
     @Autowired
     private lateinit var tarifaService: TarifaService
 
-    private fun <T> okOuNoContent(lista: List<T>): ResponseEntity<List<T>> { // criada apenas p/ brincar com Generics da kotlin
-        return if (lista.isEmpty()) noContent().build() else ok(lista)
+    private fun <T> okOuNoContent(lista: List<T>?): ResponseEntity<List<T>> { // criada apenas p/ brincar com Generics da kotlin
+        return if (lista == null || lista.isEmpty()) noContent().build() else ok(lista)
     }
 
     @GetMapping
