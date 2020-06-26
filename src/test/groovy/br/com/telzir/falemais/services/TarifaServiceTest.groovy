@@ -1,5 +1,6 @@
 package br.com.telzir.falemais.services
 
+import br.com.telzir.falemais.enums.PlanoFaleMais
 import br.com.telzir.falemais.enums.Tarifa
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -14,20 +15,76 @@ class TarifaServiceTest extends Specification {
         service = new TarifaService()
     }
 
-    def 'Lista de tarifas da service devem estar com os valores recuperados da Enum de Tarifa'() {
-        given:
+    def 'Lista de tarifas da service deve estar com os valores recuperados da base de Tarifa'() {
+        given: 'Todas as tarifas cadastradas'
         def tarifasBase = Tarifa.values()
 
-        when:
+        when: 'Recuperando as tarifas da Service'
         def presenters = service.getTarifas()
 
-        then:
+        then: 'A lista tem que possuir mesmo tamanho'
         presenters.size() == tarifasBase.size()
+
+        and: 'E os valores dos itens devem estar corretos'
         tarifasBase.eachWithIndex { tarifa, i ->
-            tarifa.origem == presenters[i].origem
-            tarifa.destino == presenters[i].destino
-            tarifa.tarifaMinuto == presenters[i].tarifa
+            assert tarifa.origem == presenters[i].origem
+            assert tarifa.destino == presenters[i].destino
+            assert tarifa.tarifaMinuto == presenters[i].tarifa
         }
+    }
+
+    def 'Lista de planos da service deve estar com os valores recuperados da base de Planos'() {
+        given: 'Todas as tarifas cadastradas'
+        def planosBase = PlanoFaleMais.values()
+
+        when: 'Recuperando as tarifas da Service'
+        def presenters = service.getPlanos()
+
+        then: 'A lista tem que possuir mesmo tamanho'
+        presenters.size() == planosBase.size()
+
+        and: 'E os valores dos itens devem estar corretos'
+        planosBase.eachWithIndex { plano, i ->
+            assert plano.name() == presenters[i].codigo
+            assert plano.descricao == presenters[i].descricao
+        }
+    }
+
+    def 'Lista de DDDs de origem da service deve possuir todos os DDD que estão em origem na base de Tarifa'() {
+        given: 'Todos os DDDs de origem cadastrados'
+        def origensBase = Tarifa.values().collect {it.origem}.toUnique()
+
+        when: 'Recuperando os DDDs da Service'
+        def presenters = service.getDddsOrigem()
+
+        then: 'A lista tem que possuir mesmo tamanho'
+        presenters.size() == origensBase.size()
+
+        and: 'E os valores dos itens devem estar corretos'
+        origensBase.eachWithIndex { origem, i ->
+            assert origem == presenters[i]
+        }
+    }
+
+    def 'Lista de DDDs de destino da service deve possuir todos os DDD de destino conforme uma origem informada'() {
+        given: 'Todos os DDDs de origem cadastrados'
+        def origensBase = Tarifa.values().collect {it.origem}.toUnique()
+
+        when: 'Recuperando os DDDs da Service'
+        List<List> presenters = []
+        List<List> destinos = []
+        origensBase.each { origem ->
+            presenters.add(service.getDddsDestino(origem))
+            destinos.add(Tarifa.values().findAll {it.origem == origem}.collect {it.destino}.unique())
+        }
+
+        then: 'A lista tem que possuir mesmo tamanho e os valores dos itens devem estar corretos'
+        presenters.eachWithIndex { listaPresenters, i ->
+            def listaDestinos = destinos[i]
+            assert listaPresenters.size() == listaDestinos.size()
+            assert listaPresenters.containsAll(listaDestinos)
+        }
+
     }
 
     @Unroll
@@ -121,19 +178,21 @@ class TarifaServiceTest extends Specification {
     }
 
     @Unroll
-    def "Simulação c/ origem: #origem, destino: #destino, minutos: #minutos > Plano: #plano - Com Fale Mais: \$#com, Sem Fale Mais: \$#sem"() {
-        setup:
-        def simulacao = service.getSimulacao(origem, destino, minutos, plano)
+    def "Simulação para todos os planos deve conter a lista de simulações correta"() {
+        given:
+        def origem = Tarifa.values().first().origem
+        def destino = Tarifa.values().first().destino
+        def minutos = 50
 
-        expect: 'Os valores de tarifa com e sem o plano FaleMais devem estar corretos e demais valores inalterados'
-        simulacao.comFaleMais?.doubleValue() == com
-        simulacao.semFaleMais?.doubleValue() == sem
-        simulacao.origem == origem
-        simulacao.destino == destino
-        simulacao.plano == plano.getDescricao()
+        when:
+        def simulacoes = service.getSimulacaoTodosPlanos(origem, destino, minutos)
 
-        where: 'Valores com e sem plano FaleMais em diferentes combinações'
-        origem | destino | minutos | plano        | com | sem
-        '11'   | '16'    | 20      | FALE_MAIS_30 | 0   | 38  // do exemplo do PDF
+        then: 'Os valores de tarifa com e sem o plano FaleMais devem estar corretos e demais valores inalterados'
+        for (simulacao in simulacoes) {
+            def simulacaoPlano = service.getSimulacao(origem, destino, minutos, PlanoFaleMais.getPorDescricao(simulacao.plano))
+            assert simulacao == simulacaoPlano
+        }
+
     }
+
 }

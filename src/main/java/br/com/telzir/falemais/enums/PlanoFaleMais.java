@@ -14,6 +14,16 @@ public enum PlanoFaleMais {
         this.descricao = descricao;
     }
 
+    public static PlanoFaleMais getPorDescricao(String descricao) {
+        for (PlanoFaleMais plano : values()) {
+            if (plano.descricao.equals(descricao)) {
+                return plano;
+            }
+        }
+        throw new IllegalArgumentException(
+                String.format("Plano de descricao '%s' não encontrado", descricao));
+    }
+
     public String getDescricao() {
         return descricao;
     }
